@@ -1,4 +1,4 @@
-# 🏆 Campeonato Pedestrianismo: Sistema de Gestão do Corredor
+# 🏆 Campeonato de Pedestrianismo
 
 ## ✨ Descrição do Projeto
 

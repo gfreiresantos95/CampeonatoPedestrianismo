@@ -24,9 +24,7 @@ body {
 /* 1. SEÇÃO DA IMAGEM */
 .image-section {
     flex: 2; /* Ocupa 2/3 da largura */
-    /* IMPORTANTE: Substitua 'url(...)' pela sua imagem.
-       Usei um placeholder mais genérico de corrida.
-    */
+    /* IMPORTANTE: Substitua 'url(...)' pela sua imagem. */
     background: url('https://hips.hearstapps.com/hmg-prod/images/gettyimages-953148956-6424412b133e3.jpg?crop=0.668xw:1.00xh;0.332xw,0&resize=640:*') center center no-repeat;
     background-size: cover;
     position: relative;
@@ -62,14 +60,14 @@ body {
     flex-direction: column;
     justify-content: center;
     max-width: 500px; /* Limite de largura para o formulário */
-    text-align: center; /* NOVO: Centraliza todo o texto */
+    text-align: center; /* NOVO: Centraliza o texto */
 
     /* NOVAS REGRAS PARA O LAYOUT FULL-WIDTH (Usado no Cadastro) */
-        width: 100%; /* Ocupa 100% do split-container */
-        max-width: 800px; /* Garante que o formulário não fique GIGANTE em monitores 4K */
-        margin: 0 auto; /* Centraliza o bloco na página */
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.08); /* Adiciona sombra para destacar o bloco */
-        border-radius: 12px;
+    width: 100%; /* Ocupa 100% do split-container */
+    max-width: 800px; /* Garante que o formulário não fique GIGANTE em monitores 4K */
+    margin: 0 auto; /* Centraliza o bloco na página */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08); /* Adiciona sombra para destacar o bloco */
+    border-radius: 12px;
 }
 
 /* Sobrescreve a largura do split-container para centralizar o formulário no BODY */
@@ -120,7 +118,6 @@ body {
     text-align: left; /* Mantém o label alinhado à esquerda */
 }
 
-
 .form-group {
     margin-bottom: 20px;
 }
@@ -133,13 +130,37 @@ body {
     font-size: 0.9em;
 }
 
-.form-group input {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="tel"],
+.form-group input[type="date"], /* Incluindo o campo de data aqui */
+.form-group select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ced4da;
     border-radius: 8px;
     box-sizing: border-box;
     font-size: 1em;
+    height: 44px; /* Garante que todos os campos têm a mesma altura */
+    background-color: #ffffff; /* Fundo branco consistente */
+    color: #343a40;
+}
+
+/* Foco (Focus State) para todos os inputs e selects */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Regras específicas para o Date Input (para ajustar ícones nativos) */
+.form-group input[type="date"] {
+    /* Remove a seta/botão nativo em alguns navegadores, mantendo apenas o ícone de calendário */
+    /* Isso geralmente melhora a consistência visual */
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 /* Checkbox e Link "Esqueceu a Senha?" */
@@ -313,21 +334,24 @@ body {
     gap: 20px;
 }
 
-/* Layout específico para o campo CEP com botão */
-.cep-group {
+/* Botão Quadrado com Ícone (para Busca de CEP) */
+.btn-icon {
+    width: 44px; /* Largura igual à altura */
+    height: 44px; /* Altura igual ao input (12px padding + 1px borda) */
+    padding: 0; /* Remove o padding interno padrão */
+    font-size: 1.2em; /* Tamanho maior para a lupa */
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px; /* Mantém o raio de borda */
+    /* Garante que o ícone é mais forte que o botão secundário */
+    background-color: #007bff;
+    color: white;
+    flex-shrink: 0; /* Impede que o botão diminua */
 }
 
-.cep-group input {
-    flex-grow: 1;
-}
-
-.btn-small {
-    padding: 0 10px;
-    height: 44px;
-    align-self: flex-end;
-    font-size: 0.9em;
+.btn-icon:hover {
+    background-color: #0056b3;
 }
 
 .form-actions {
@@ -348,8 +372,138 @@ body {
         gap: 5px;
     }
 
-    .btn-small {
+    /* Faz o botão icon voltar a ter a largura total */
+    .btn-icon {
+        width: 100%;
         height: auto;
         padding: 10px;
     }
+}
+
+/* --- Estilização do Dropdown (<select>) --- */
+
+.form-group select {
+    /* Herda o estilo do input para ter a mesma altura e borda */
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+    appearance: none; /* Remove a seta padrão do sistema operacional */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23343a40" d="M7 10l5 5 5-5z"/></svg>'); /* Adiciona nossa própria seta (SVG) */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px; /* Garante que o texto não sobreponha a seta */
+    cursor: pointer;
+}
+
+.form-group select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* --- Estilos de Validação (Feedback) --- */
+.input-valido {
+    border-color: #28a745 !important; /* Borda Verde */
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.25) !important;
+}
+
+.input-invalido {
+    border-color: #dc3545 !important; /* Borda Vermelha */
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25) !important;
+}
+
+/* -------------------------------------- */
+/* ESTILO PARA CAMPO SOMENTE LEITURA (OPCIONAL) */
+/* -------------------------------------- */
+input[readonly] {
+    background-color: #f0f0f0; /* Cor de fundo para indicar que não é editável */
+    cursor: not-allowed;
+}
+
+/* ---------------------------------------------------- */
+/* REGRAS GERAIS PARA FORM-GROUP-DUO (Se 50%/50% é o padrão) */
+/* ---------------------------------------------------- */
+.form-group-duo {
+    display: flex;
+    gap: 20px; /* **Assumindo que o espaçamento entre colunas é 20px** */
+    width: 100%;
+}
+
+.form-group-duo .form-group {
+    /* Define o padrão para 50% menos metade do gap */
+    flex-basis: calc(50% - 10px);
+    max-width: calc(50% - 10px);
+}
+
+/* ---------------------------------------------------- */
+/* CORREÇÃO PARA O ALINHAMENTO DO TRIO (25% | 25% | 50%) */
+/* ---------------------------------------------------- */
+
+.form-group-duo.trio-endereco {
+    /* Não precisa mudar o display nem o gap, apenas o flex-basis dos filhos */
+    /* Remove a quebra de linha que adicionei antes, pode ter sido a causa */
+    flex-wrap: nowrap;
+}
+
+/* 1. NÚMERO & COMPLEMENTO (25% cada) */
+.form-group-duo.trio-endereco .num-comp-input-group {
+    /* Força 25% menos a sua parte do espaçamento (gap) */
+    flex-basis: calc(25% - 13.33px); /* Ajuste: (2 * gap) / 3 = 13.33 */
+    max-width: calc(25% - 13.33px);
+    /* Permite que o elemento encolha para caber, mas não cresça muito */
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+
+/* 2. BAIRRO (50%) */
+.form-group-duo.trio-endereco .bairro-input-group {
+    /* Força 50% menos a sua parte do espaçamento (gap) */
+    flex-basis: calc(50% - 13.33px);
+    max-width: calc(50% - 13.33px);
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+
+/* Garante que os inputs internos ocupem o máximo de seu container (100%) */
+.form-group-duo.trio-endereco input {
+    width: 100%;
+}
+
+/* ---------------------------------------------------- */
+/* AJUSTE DE LAYOUT TRIO EMERGENCIA (33.33% | 33.33% | 33.33%) */
+/* ---------------------------------------------------- */
+
+.form-group-duo.trio-emergencia {
+    /* Mantém as propriedades flexbox padrões */
+    flex-wrap: nowrap;
+}
+
+/* Regra para os 3 campos (Nome, Telefone, Parentesco) */
+.form-group-duo.trio-emergencia .form-group {
+    /* Largura ideal para 3 colunas é 33.33% */
+    /* Assumindo gap: 20px no form-group-duo. Total de 40px de gap dividido por 3: 13.33px */
+    flex-basis: calc(33.333% - 13.33px);
+    max-width: calc(33.333% - 13.33px);
+    flex-grow: 1; /* Permite um pequeno crescimento para preencher o espaço restante */
+    flex-shrink: 1;
+}
+
+/* Garante que os inputs internos ocupem o máximo de seu container (100%) */
+.form-group-duo.trio-emergencia input {
+    width: 100%;
+}
+
+/* -------------------------------------- */
+/* CORREÇÃO DE ESPAÇAMENTO VERTICAL PADRÃO */
+/* -------------------------------------- */
+
+/* Esta classe pode ser aplicada a qualquer .form-group ou .form-group-duo */
+/* que precise de um espaçamento extra abaixo para manter o padrão. */
+.espacamento-padrao {
+    /* Use o mesmo valor de margin-bottom que separa o restante das suas linhas */
+    margin-bottom: 20px;
 }

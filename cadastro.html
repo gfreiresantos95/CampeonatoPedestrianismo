@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Novo Cadastro - Campeonato Pedestrianismo</title>
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+          rel="stylesheet">
     <style>
         /* CSS INLINE TEMPORÁRIO para garantir o layout full-width */
         .page-cadastro .split-container {
@@ -31,14 +32,167 @@
         <form id="register-form-full">
             <fieldset class="form-section">
                 <legend>Dados Pessoais</legend>
+
+                <div class="form-group">
+                    <label for="nome-completo">Nome Completo</label>
+                    <input type="text" id="nome-completo" required placeholder="Seu nome completo">
+                </div>
+
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="cpf">CPF</label>
+                        <input type="text" id="cpf" placeholder="000.000.000-00" required
+                               oninput="maskCPF(this)" maxlength="14">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="data-nasc">Data de Nascimento</label>
+                        <input type="date" id="data-nasc" required onchange="validarIdade(this)">
+                    </div>
+                </div>
+
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="genero">Gênero</label>
+                        <select id="genero" required>
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="M">Masculino</option>
+                            <option value="F">Feminino</option>
+                            <option value="O">Outro</option>
+                            <option value="N">Prefiro não informar</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="celular">Celular</label>
+                        <input type="tel" id="celular" required placeholder="(99) 99999-9999"
+                               oninput="maskCelular(this)" maxlength="15">
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="form-section">
                 <legend>Dados de Acesso</legend>
+
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" required placeholder="seu@email.com"
+                               onblur="validarEmail(this)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conf-email">Confirmar E-mail</label>
+                        <input type="email" id="conf-email" required onblur="validarEmail(this)">
+                    </div>
+                </div>
+
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input type="password" id="senha" required placeholder="Mínimo 6 caracteres"
+                               oninput="validarSenhas()">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conf-senha">Confirmar Senha</label>
+                        <input type="password" id="conf-senha" required oninput="validarSenhas()">
+                    </div>
+                </div>
             </fieldset>
 
             <fieldset class="form-section">
-                <legend>Endereço e Contato</legend>
+                <legend>Endereço e Emergência</legend>
+
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" required placeholder="00000-000"
+                               oninput="maskCEP(this)" onblur="buscarCEP(this.value)" maxlength="9">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="logradouro">Rua/Avenida</label>
+                        <input type="text" id="logradouro" required
+                               placeholder="Preenchimento automático" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group-duo trio-endereco">
+                    <div class="form-group num-comp-input-group">
+                        <label for="numero">Número</label>
+                        <input type="text" id="numero" required placeholder="Nº" oninput="limparNaoNumeros(this)">
+                    </div>
+
+                    <div class="form-group num-comp-input-group">
+                        <label for="complemento">Complemento</label>
+                        <input type="text" id="complemento" placeholder="Apto/Bloco">
+                    </div>
+
+                    <div class="form-group bairro-input-group">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" id="bairro" required placeholder="Preenchimento automático" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" id="cidade" required placeholder="Preenchimento automático" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estado">Estado (UF)</label>
+                        <input type="text" id="estado" required placeholder="UF" maxlength="2" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group espacamento-padrao">
+                    <label for="nome-emergencia">Nome do Contato de Emergência</label>
+                    <input type="text" id="nome-emergencia" required placeholder="Nome completo">
+                </div>
+
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="telefone-emergencia">Telefone de Emergência</label>
+                        <input type="tel" id="telefone-emergencia" required placeholder="(99) 99999-9999" oninput="maskCelular(this)" maxlength="15">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="parentesco">Grau de Parentesco</label>
+                        <input type="text" id="parentesco" required placeholder="Ex: Pai, Esposa, Amigo">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>Informações da Corrida</legend>
+                <div class="form-group-duo">
+                    <div class="form-group">
+                        <label for="distancia">Distância de Preferência</label>
+                        <select id="distancia" required>
+                            <option value="">Selecione</option>
+                            <option value="5k">5 km</option>
+                            <option value="10k">10 km</option>
+                            <option value="21k">Meia Maratona (21 km)</option>
+                            <option value="42k">Maratona (42 km)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="camisa-tamanho">Tamanho da Camisa</label>
+                        <select id="camisa-tamanho" required>
+                            <option value="">Selecione</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="clube-assessoria">Clube ou Assessoria Esportiva (Opcional)</label>
+                    <input type="text" id="clube-assessoria" placeholder="Nome do seu grupo/equipe">
+                </div>
             </fieldset>
 
             <div class="form-actions">
