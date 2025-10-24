@@ -1,0 +1,19 @@
+# IDEs e Editores
+.idea/
+.vscode/
+*.swp
+*.bak
+.DS_Store # (macOS)
+Thumbs.db # (Windows)
+
+# Dependências (Se você usar Node.js no futuro)
+/node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de Build/Distribuição (Se você usar Webpack/Vite no futuro)
+/dist
+/build
