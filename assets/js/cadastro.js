@@ -1,249 +1,252 @@
-// ==========================================================
-// FUNÇÕES DE MÁSCARA PARA CPF E RG (Chamadas no HTML oninput)
-// ==========================================================
+/**
+* Valida o CPF usando o algoritmo do Dígito Verificador (Módulo 11).
+* @param {string} cpf - O CPF a ser validado (string de 11 dígitos).
+* @returns {boolean} - Retorna true se o CPF for matematicamente válido.
+*/
+function validarCPF(cpf) {
+    // 1. Limpa o CPF de caracteres não numéricos
+    cpf = cpf.replace(/[^\d]+/g, '');
 
-    /**
-     * Valida o CPF usando o algoritmo do Dígito Verificador (Módulo 11).
-     * @param {string} cpf - O CPF a ser validado (string de 11 dígitos).
-     * @returns {boolean} - Retorna true se o CPF for matematicamente válido.
-     */
-    function validarCPF(cpf) {
-        // 1. Limpa o CPF de caracteres não numéricos
-        cpf = cpf.replace(/[^\d]+/g, '');
-
-        // 2. Verifica se tem 11 dígitos e rejeita sequências repetidas (ex: "111.111.111-11")
-        if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-            return false;
-        }
-
-        // 3. Cálculo do 1º Dígito Verificador
-        let soma = 0;
-        let resto;
-        for (let i = 1; i <= 9; i++) {
-            soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
-        }
-        resto = (soma * 10) % 11;
-        if ((resto === 10) || (resto === 11)) {
-            resto = 0;
-        }
-        if (resto !== parseInt(cpf.substring(9, 10))) {
-            return false;
-        }
-
-        // 4. Cálculo do 2º Dígito Verificador
-        soma = 0;
-        for (let i = 1; i <= 10; i++) {
-            soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
-        }
-        resto = (soma * 10) % 11;
-        if ((resto === 10) || (resto === 11)) {
-            resto = 0;
-        }
-        if (resto !== parseInt(cpf.substring(10, 11))) {
-            return false;
-        }
-
-        return true;
+    // 2. Verifica se tem 11 dígitos e rejeita sequências repetidas (ex: "111.111.111-11")
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false;
     }
 
-    /**
-     * Função principal para aplicar a máscara e validação visual no campo CPF.
-     * @param {HTMLInputElement} i - O elemento input.
-     */
-    function maskCPF(i) {
-        // Lógica da máscara (mantida)
-        let v = i.value.replace(/\D/g, '');
-        v = v.substring(0, 11);
-        v = v.replace(/(\d{3})(\d)/, '$1.$2');
-        v = v.replace(/(\d{3})(\d)/, '$1.$2');
-        v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-        i.value = v;
+    // 3. Cálculo do 1º Dígito Verificador
+    let soma = 0;
+    let resto;
 
-        // Lógica da validação visual (chamada no oninput para feedback rápido)
-        // O onblur será usado para a validação final (ver seção B)
-        i.classList.remove('input-valido', 'input-invalido');
-        if (v.length === 11) {
-            if (validarCPF(v)) {
-                i.classList.add('input-valido');
-            } else {
-                i.classList.add('input-invalido');
-            }
-        }
+    for (let i = 1; i <= 9; i++) {
+        soma = soma + parseInt(cpf.substring(i - 1, i)) * (11 - i);
     }
 
-    /**
-     * Aplica a máscara de Celular ((##) 9####-####) e aceita apenas números.
-     * @param {HTMLInputElement} i - O elemento input.
-     */
-    function maskCelular(i) {
-        // 1. Remove qualquer caractere que não seja dígito
-        let v = i.value.replace(/\D/g, '');
+    resto = (soma * 10) % 11;
 
-        // 2. Limita o tamanho máximo de números (11 dígitos para o formato completo)
-        v = v.substring(0, 11);
-
-        // 3. Aplica a máscara em tempo real: (##) 9####-####
-        v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); // Adiciona parênteses e espaço: (00) 000000000
-        v = v.replace(/(\d{5})(\d)/g, '$1-$2');   // Adiciona o traço: (00) 00000-0000
-
-        i.value = v;
+    if ((resto === 10) || (resto === 11)) {
+        resto = 0;
     }
 
-    /**
-     * Valida o formato básico de um e-mail.
-     * @param {HTMLInputElement} i - O elemento input.
-     */
-    function validarEmail(i) {
-        const email = i.value;
-        // Regex simples para verificar a estrutura basica: texto@texto.texto
-        const regexEmail = /^\S+@\S+\.\S+$/;
+    if (resto !== parseInt(cpf.substring(9, 10))) {
+        return false;
+    }
 
-        // Remove classes de feedback anteriores
-        i.classList.remove('input-valido', 'input-invalido');
+    // 4. Cálculo do 2º Dígito Verificador
+    soma = 0;
 
-        if (email === "") {
-            // Se estiver vazio, não faz nada (a validação 'required' do HTML cuida disso)
-            return;
-        }
+    for (let i = 1; i <= 10; i++) {
+        soma = soma + parseInt(cpf.substring(i - 1, i)) * (12 - i);
+    }
 
-        if (regexEmail.test(email)) {
-            // Formato OK
+    resto = (soma * 10) % 11;
+
+    if ((resto === 10) || (resto === 11)) {
+        resto = 0;
+    }
+
+    if (resto !== parseInt(cpf.substring(10, 11))) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+* Função principal para aplicar a máscara e validação visual no campo CPF.
+* @param {HTMLInputElement} i - O elemento input.
+*/
+function maskCPF(i) {
+    // Lógica da máscara (mantida)
+    let v = i.value.replace(/\D/g, '');
+    v = v.substring(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+    i.value = v;
+
+    // Lógica da validação visual (chamada no oninput para feedback rápido)
+    // O onblur será usado para a validação final (ver seção B)
+    i.classList.remove('input-valido', 'input-invalido');
+
+    if (v.length === 11) {
+        if (validarCPF(v)) {
             i.classList.add('input-valido');
         } else {
-            // Formato Inválido
             i.classList.add('input-invalido');
-            // Opcional: Avisar o usuário (se o input for type="text", mas type="email" já avisa)
-            // alert("Por favor, insira um endereço de e-mail válido.");
-        }
-
-        // Validação extra: verifica se Email e Confirmação de E-mail são iguais
-        if (i.id === 'conf-email' || i.id === 'email') {
-            const emailInput = document.getElementById('email');
-            const confEmailInput = document.getElementById('conf-email');
-
-            if (emailInput.value !== '' && confEmailInput.value !== '' && emailInput.value !== confEmailInput.value) {
-                confEmailInput.classList.remove('input-valido');
-                confEmailInput.classList.add('input-invalido');
-                // Opcional: mostrar uma mensagem de erro abaixo dos campos
-            } else if (emailInput.value === confEmailInput.value && emailInput.value !== '') {
-                confEmailInput.classList.add('input-valido');
-                confEmailInput.classList.remove('input-invalido');
-            }
         }
     }
+}
 
-    /**
-     * Valida se os campos de Senha e Confirmação de Senha são iguais.
-     * Aplica as classes 'input-valido' ou 'input-invalido' para feedback visual.
-     */
-    function validarSenhas() {
-        const senha = document.getElementById('senha');
-        const confSenha = document.getElementById('conf-senha');
-        const senhaValor = senha.value;
-        const confSenhaValor = confSenha.value;
+/**
+* Aplica a máscara de Celular ((##) 9####-####) e aceita apenas números.
+* @param {HTMLInputElement} i - O elemento input.
+*/
+function maskCelular(i) {
+    // 1. Remove qualquer caractere que não seja dígito
+    let v = i.value.replace(/\D/g, '');
 
-        // Limpa classes de ambos os campos
-        senha.classList.remove('input-valido', 'input-invalido');
-        confSenha.classList.remove('input-valido', 'input-invalido');
+    // 2. Limita o tamanho máximo de números (11 dígitos para o formato completo)
+    v = v.substring(0, 11);
 
-        // REGRA 1: Verifica se as senhas estão vazias (ignora a validação)
-        if (senhaValor === '' && confSenhaValor === '') {
-            return;
+    // 3. Aplica a máscara em tempo real: (##) 9####-####
+    v = v.replace(/^(\d{2})(\d)/g, '($1) $2'); // Adiciona parênteses e espaço: (00) 000000000
+    v = v.replace(/(\d{5})(\d)/g, '$1-$2');   // Adiciona o traço: (00) 00000-0000
+
+    i.value = v;
+}
+
+/**
+* Valida o formato básico de um e-mail.
+* @param {HTMLInputElement} i - O elemento input.
+*/
+function validarEmail(i) {
+    const email = i.value;
+    // Regex simples para verificar a estrutura basica: texto@texto.texto
+    const regexEmail = /^\S+@\S+\.\S+$/;
+
+    // Remove classes de feedback anteriores
+    i.classList.remove('input-valido', 'input-invalido');
+
+    if (email === "") {
+        // Se estiver vazio, não faz nada (a validação 'required' do HTML cuida disso)
+        return;
+    }
+
+    if (regexEmail.test(email)) {
+        // Formato OK
+        i.classList.add('input-valido');
+    } else {
+        // Formato Inválido
+        i.classList.add('input-invalido');
+        // Opcional: Avisar o usuário (se o input for type="text", mas type="email" já avisa)
+        // alert("Por favor, insira um endereço de e-mail válido.");
+    }
+
+    // Validação extra: verifica se Email e Confirmação de E-mail são iguais
+    if (i.id === 'conf-email' || i.id === 'email') {
+        const emailInput = document.getElementById('email');
+        const confEmailInput = document.getElementById('conf-email');
+
+        if (emailInput.value !== '' && confEmailInput.value !== '' && emailInput.value !== confEmailInput.value) {
+            confEmailInput.classList.remove('input-valido');
+            confEmailInput.classList.add('input-invalido');
+            // Opcional: mostrar uma mensagem de erro abaixo dos campos
+        } else if (emailInput.value === confEmailInput.value && emailInput.value !== '') {
+            confEmailInput.classList.add('input-valido');
+            confEmailInput.classList.remove('input-invalido');
         }
+    }
+}
 
-        // REGRA 2: Requisito Mínimo de Senha (Ex: 6 caracteres)
-        const minLength = 6;
-        let senhaValida = senhaValor.length >= minLength;
-        let confSenhaValida = confSenhaValor.length >= minLength;
+/**
+* Valida se os campos de Senha e Confirmação de Senha são iguais.
+* Aplica as classes 'input-valido' ou 'input-invalido' para feedback visual.
+*/
+function validarSenhas() {
+    const senha = document.getElementById('senha');
+    const confSenha = document.getElementById('conf-senha');
+    const senhaValor = senha.value;
+    const confSenhaValor = confSenha.value;
 
-        // Aplica feedback baseado no comprimento mínimo (se ainda não forem iguais)
-        if (senhaValor !== confSenhaValor) {
-            if (senhaValida) {
-                senha.classList.add('input-valido');
-            } else if (senhaValor.length > 0) {
-                senha.classList.add('input-invalido');
-            }
-        }
+    // Limpa classes de ambos os campos
+    senha.classList.remove('input-valido', 'input-invalido');
+    confSenha.classList.remove('input-valido', 'input-invalido');
 
-        // REGRA 3: Verifica se as senhas são iguais
-        if (senhaValor === confSenhaValor && senhaValida) {
-            // Se forem iguais e ambas cumprirem o mínimo
+    // REGRA 1: Verifica se as senhas estão vazias (ignora a validação)
+    if (senhaValor === '' && confSenhaValor === '') {
+        return;
+    }
+
+    // REGRA 2: Requisito Mínimo de Senha (Ex: 6 caracteres)
+    const minLength = 6;
+    let senhaValida = senhaValor.length >= minLength;
+    let confSenhaValida = confSenhaValor.length >= minLength;
+
+    // Aplica feedback baseado no comprimento mínimo (se ainda não forem iguais)
+    if (senhaValor !== confSenhaValor) {
+        if (senhaValida) {
             senha.classList.add('input-valido');
-            confSenha.classList.add('input-valido');
-
-            senha.classList.remove('input-invalido');
-            confSenha.classList.remove('input-invalido');
-
-        } else if (confSenhaValor.length > 0) {
-            // Se Confirmação tiver algo digitado, mas não for igual
-            confSenha.classList.add('input-invalido');
+        } else if (senhaValor.length > 0) {
+            senha.classList.add('input-invalido');
         }
     }
 
-    /**
-     * Valida se a data de nascimento indica que o usuário tem no mínimo 16 anos.
-     * @param {HTMLInputElement} input - O elemento input da data de nascimento.
-     */
-    function validarIdade(input) {
-        const dataNascStr = input.value;
-        input.classList.remove('input-valido', 'input-invalido');
+    // REGRA 3: Verifica se as senhas são iguais
+    if (senhaValor === confSenhaValor && senhaValida) {
+        // Se forem iguais e ambas cumprirem o mínimo
+        senha.classList.add('input-valido');
+        confSenha.classList.add('input-valido');
+        senha.classList.remove('input-invalido');
+        confSenha.classList.remove('input-invalido');
+    } else if (confSenhaValor.length > 0) {
+    // Se Confirmação tiver algo digitado, mas não for igual
+    confSenha.classList.add('input-invalido');
+    }
+}
 
-        if (!dataNascStr) {
-            // Ignora a validação se o campo estiver vazio
-            return;
-        }
+/**
+* Valida se a data de nascimento indica que o usuário tem no mínimo 16 anos.
+* @param {HTMLInputElement} input - O elemento input da data de nascimento.
+*/
+function validarIdade(input) {
+    const dataNascStr = input.value;
+    input.classList.remove('input-valido', 'input-invalido');
 
-        // Converte a data de nascimento para um objeto Date
-        const dataNascimento = new Date(dataNascStr);
-
-        // Obtém a data de hoje
-        const hoje = new Date();
-
-        // Data limite: Calcula a data de 16 anos atrás
-        // Subtrai 16 anos da data atual (Hoje)
-        const dataLimite = new Date(hoje.getFullYear() - 16, hoje.getMonth(), hoje.getDate());
-
-        // Se a data de nascimento for anterior ou igual à data limite, a pessoa tem 16 anos ou mais.
-        // Ex: Se hoje é 24/10/2025, a data limite é 24/10/2009.
-        // Uma pessoa nascida em 23/10/2009 ou antes é válida.
-        // Uma pessoa nascida em 25/10/2009 ou depois é inválida.
-
-        let isValido = dataNascimento <= dataLimite;
-
-        if (isValido) {
-            input.classList.add('input-valido');
-            // Você pode adicionar uma mensagem de erro aqui caso use um span de feedback
-            // Ex: document.getElementById('erro-idade').textContent = "";
-        } else {
-            input.classList.add('input-invalido');
-            // Ex: document.getElementById('erro-idade').textContent = "Idade mínima de 16 anos não atingida.";
-
-            // Opcional: Impedir a submissão (se for no evento submit do formulário)
-            // Por enquanto, o feedback visual é suficiente.
-        }
+    if (!dataNascStr) {
+        // Ignora a validação se o campo estiver vazio
+        return;
     }
 
-    /**
-     * Aplica a máscara de CEP no formato #####-###
-     * @param {HTMLInputElement} i - O elemento input do CEP.
-     */
-    function maskCEP(i) {
-        let v = i.value.replace(/\D/g, ''); // 1. Remove tudo o que não for dígito
-        v = v.substring(0, 8); // 2. Limita a 8 dígitos (sem o hífen)
-        v = v.replace(/(\d{5})(\d)/, '$1-$2'); // 3. Coloca o hífen após o 5º dígito
-        i.value = v;
+    // Converte a data de nascimento para um objeto Date
+    const dataNascimento = new Date(dataNascStr);
 
-        // Lógica da validação visual
-        i.classList.remove('input-valido', 'input-invalido');
+    // Obtém a data de hoje
+    const hoje = new Date();
 
-        // Se o campo tiver 9 caracteres (formato completo, ex: 12345-678), é válido
-        if (i.value.length === 9) {
-            i.classList.add('input-valido');
-        } else if (i.value.length > 0) {
-            // Se estiver incompleto, mas tiver algo digitado
-            i.classList.add('input-invalido');
-        }
+    // Data limite: Calcula a data de 16 anos atrás
+    // Subtrai 16 anos da data atual (Hoje)
+    const dataLimite = new Date(hoje.getFullYear() - 16, hoje.getMonth(), hoje.getDate());
+
+    // Se a data de nascimento for anterior ou igual à data limite, a pessoa tem 16 anos ou mais.
+    // Ex: Se hoje é 24/10/2025, a data limite é 24/10/2009.
+    // Uma pessoa nascida em 23/10/2009 ou antes é válida.
+    // Uma pessoa nascida em 25/10/2009 ou depois é inválida.
+    let isValido = dataNascimento <= dataLimite;
+
+    if (isValido) {
+        input.classList.add('input-valido');
+        // Você pode adicionar uma mensagem de erro aqui caso use um span de feedback
+        // Ex: document.getElementById('erro-idade').textContent = "";
+    } else {
+        input.classList.add('input-invalido');
+        // Ex: document.getElementById('erro-idade').textContent = "Idade mínima de 16 anos não atingida.";
+        // Opcional: Impedir a submissão (se for no evento submit do formulário)
+        // Por enquanto, o feedback visual é suficiente.
     }
+}
+
+/**
+* Aplica a máscara de CEP no formato #####-###
+* @param {HTMLInputElement} i - O elemento input do CEP.
+*/
+function maskCEP(i) {
+    let v = i.value.replace(/\D/g, ''); // 1. Remove tudo o que não for dígito
+    v = v.substring(0, 8); // 2. Limita a 8 dígitos (sem o hífen)
+    v = v.replace(/(\d{5})(\d)/, '$1-$2'); // 3. Coloca o hífen após o 5º dígito
+
+    i.value = v;
+
+    // Lógica da validação visual
+    i.classList.remove('input-valido', 'input-invalido');
+
+    // Se o campo tiver 9 caracteres (formato completo, ex: 12345-678), é válido
+    if (i.value.length === 9) {
+        i.classList.add('input-valido');
+    } else if (i.value.length > 0) {
+        // Se estiver incompleto, mas tiver algo digitado
+        i.classList.add('input-invalido');
+    }
+}
 
     /**
      * Realiza a busca de endereço pelo CEP usando a API ViaCEP e preenche os campos.
