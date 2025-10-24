@@ -1,0 +1,355 @@
+/* Importando a fonte Roboto e reset básico */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ---------------------------------------------------- */
+/* CONTAINER PRINCIPAL: SPLIT-SCREEN LAYOUT */
+/* ---------------------------------------------------- */
+.split-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    max-width: 1400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 1. SEÇÃO DA IMAGEM */
+.image-section {
+    flex: 2; /* Ocupa 2/3 da largura */
+    /* IMPORTANTE: Substitua 'url(...)' pela sua imagem.
+       Usei um placeholder mais genérico de corrida.
+    */
+    background: url('https://hips.hearstapps.com/hmg-prod/images/gettyimages-953148956-6424412b133e3.jpg?crop=0.668xw:1.00xh;0.332xw,0&resize=640:*') center center no-repeat;
+    background-size: cover;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.image-overlay {
+    background-color: rgba(0, 0, 0, 0.4); /* Escurece um pouco a imagem */
+    padding: 40px;
+    text-align: center;
+}
+
+.image-overlay h1 {
+    font-size: 3em;
+    margin-bottom: 10px;
+    border-bottom: 3px solid white;
+    padding-bottom: 10px;
+}
+
+.image-overlay p {
+    font-size: 1.2em;
+}
+
+/* 2. SEÇÃO DO FORMULÁRIO (CENTRALIZADO) */
+.form-section-container {
+    flex: 1; /* Ocupa 1/3 da largura */
+    background-color: #ffffff;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 500px; /* Limite de largura para o formulário */
+    text-align: center; /* NOVO: Centraliza todo o texto */
+
+    /* NOVAS REGRAS PARA O LAYOUT FULL-WIDTH (Usado no Cadastro) */
+        width: 100%; /* Ocupa 100% do split-container */
+        max-width: 800px; /* Garante que o formulário não fique GIGANTE em monitores 4K */
+        margin: 0 auto; /* Centraliza o bloco na página */
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.08); /* Adiciona sombra para destacar o bloco */
+        border-radius: 12px;
+}
+
+/* Sobrescreve a largura do split-container para centralizar o formulário no BODY */
+.page-cadastro .split-container {
+    /* Remove o layout flex horizontal para esta página */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: auto;
+    min-height: 100vh;
+    padding: 30px 20px; /* Adiciona padding lateral para mobile */
+    max-width: 100%; /* Garante que o container use a tela toda */
+    box-shadow: none; /* Remove a sombra do container principal */
+}
+
+.login-header h2 {
+    color: #007bff;
+    font-size: 1em;
+    margin-bottom: 5px;
+    font-weight: 400;
+}
+
+.login-header h1 {
+    color: #343a40;
+    margin-bottom: 30px;
+    font-size: 2em;
+}
+
+/* ---------------------------------------------------- */
+/* ESTILOS DE FORMULÁRIO */
+/* ---------------------------------------------------- */
+
+.auth-form {
+    text-align: left; /* Alinha labels e inputs à esquerda */
+    transition: opacity 0.3s ease;
+}
+
+.auth-form.hidden {
+    display: none;
+    opacity: 0;
+}
+
+/* Centraliza os textos do formulário de recuperação */
+.auth-form#recover-form {
+    text-align: center;
+}
+.auth-form#recover-form .form-group {
+    text-align: left; /* Mantém o label alinhado à esquerda */
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: #343a40;
+    font-size: 0.9em;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+/* Checkbox e Link "Esqueceu a Senha?" */
+
+/* Ajustado para alinhar apenas à esquerda, corrigindo o espaçamento */
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Alinha o checkbox à esquerda */
+    margin-bottom: 25px;
+    text-align: left; /* Garante o alinhamento no container centralizado */
+}
+
+.form-group-inline label {
+    font-weight: 400;
+    margin-left: 8px; /* Espaçamento ideal entre o checkbox e o texto */
+    margin-bottom: 0;
+}
+
+/* Estilo do link na nova posição */
+.forgot-password-link {
+    display: block; /* Garante que ele ocupe a linha e permita margem */
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin-top: 15px; /* Espaço entre o botão e o link */
+    text-align: center; /* Centraliza o texto do link */
+}
+
+/* Botões de Ação */
+.btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 700;
+    transition: background-color 0.3s;
+    margin-top: 10px;
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
+    text-decoration: none; /* Para o caso de <a> */
+    display: inline-block; /* Para o caso de <a> */
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.back-to-login {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+/* Link de Novo Cadastro */
+.register-link {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+}
+
+.register-link p {
+    margin-bottom: 10px;
+    color: #6c757d;
+}
+
+/* Feedback Box - Mensagens de Erro/Sucesso */
+.feedback-box {
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.feedback-box.hidden {
+    display: none;
+}
+
+.feedback-box.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.feedback-box.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* ---------------------------------------------------- */
+/* RESPONSIVIDADE (MOBILE FIRST) */
+/* ---------------------------------------------------- */
+
+@media (max-width: 900px) {
+    .split-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+        width: 100%;
+        box-shadow: none;
+        padding: 20px;
+    }
+
+    /* Esconde a seção da imagem em mobile */
+    .image-section {
+        display: none;
+    }
+
+    .form-section-container {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin: auto; /* Centraliza verticalmente se o conteúdo for curto */
+    }
+}
+
+/* --- Estilos Específicos para Formulário Completo --- */
+
+.form-section {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.form-section legend {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #007bff;
+    padding: 0 10px;
+    width: auto;
+    margin-left: -10px;
+}
+
+/* Grids Responsivos para Múltiplas Colunas */
+.form-group-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.form-group-triple {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+/* Grid para campos pequenos (Ex: Número, Complemento, Bairro) */
+.form-group-duo-small {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr; /* Nº, Comp, Cidade */
+    gap: 20px;
+}
+
+/* Layout específico para o campo CEP com botão */
+.cep-group {
+    display: flex;
+    gap: 10px;
+}
+
+.cep-group input {
+    flex-grow: 1;
+}
+
+.btn-small {
+    padding: 0 10px;
+    height: 44px;
+    align-self: flex-end;
+    font-size: 0.9em;
+}
+
+.form-actions {
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* Responsividade do Grid */
+@media (max-width: 768px) {
+    .form-group-duo,
+    .form-group-triple,
+    .form-group-duo-small {
+        grid-template-columns: 1fr; /* Volta para uma coluna em telas menores */
+    }
+
+    .cep-group {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .btn-small {
+        height: auto;
+        padding: 10px;
+    }
+}
